@@ -1,13 +1,13 @@
 <?php
-session_start();
-require_once __DIR__ . '/../config/database.php';
+session_start();  // Start the session once here
 
+require_once __DIR__ . '/../config/database.php';  // Load your DB connection
+
+// Get current URL path (without query string)
 $url = $_SERVER['REQUEST_URI'];
-
-// Clean query string if any, only path part
 $path = parse_url($url, PHP_URL_PATH);
 
-// Routes
+// Routing logic
 if ($path === '/') {
     require __DIR__ . '/../app/controllers/home.php';
     $controller = new Home();
@@ -49,10 +49,19 @@ if ($path === '/') {
             $controller->editForm();
         }
 
+    } else if ($path === '/account/register') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->register();
+        } else {
+            $controller->registerForm();
+        }
+
     } else {
         $controller->profile();
     }
 
 } else {
+    // 404 fallback
+    http_response_code(404);
     echo "Page not found.";
 }

@@ -1,5 +1,5 @@
 <?php
-require_once 'config/database.php';
+require_once __DIR__ . '/../../config/database.php';
 
 class Account {
     private $db;
@@ -9,7 +9,7 @@ class Account {
     }
 
     public function loginForm() {
-        require 'app/views/account/login.php';
+        require __DIR__ . '/../views/account/login.php';
     }
 
     public function login() {
@@ -26,7 +26,7 @@ class Account {
             exit;
         } else {
             $error = "Invalid credentials";
-            require 'app/views/account/login.php';
+            require __DIR__ . '/../views/account/login.php';
         }
     }
 
@@ -41,7 +41,7 @@ class Account {
             header('Location: /account/login');
             exit;
         }
-        require 'app/views/account/profile.php';
+        require __DIR__ . '/../views/account/profile.php';
     }
 
     public function editForm() {
@@ -49,7 +49,7 @@ class Account {
             header('Location: /account/login');
             exit;
         }
-        require 'app/views/account/edit.php';
+        require __DIR__ . '/../views/account/edit.php';
     }
 
     public function edit() {
@@ -65,6 +65,43 @@ class Account {
         $stmt->execute(['name' => $name, 'id' => $userId]);
 
         header('Location: /account');
+        exit;
+    }
+
+    public function registerForm() {
+        require __DIR__ . '/../views/account/register.php';
+    }
+
+    public function register() {
+        $username = $_POST['username'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $confirm = $_POST['confirm_password'] ?? '';
+
+        if ($password !== $confirm) {
+            $error = "Passwords do not match";
+            require __DIR__ . '/../views/account/register.php';
+            return;
+        }
+
+        // Check if username exists
+        $stmt = $this->db->prepare('SELECT * FROM users WHERE username = :username');
+        $stmt->execute(['username' => $username]);
+        if ($stmt->fetch()) {
+            $error = "Username already taken";
+            require __DIR__ . '/../views/account/register.php';
+            return;
+        }
+
+        // Insert new user with hashed password
+        $hashed = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $this->db->prepare('INSERT INTO users (username, password) VALUES (:username, :password)');
+        $stmt->execute([
+            'username' => $username,
+            'password' => $hashed,
+        ]);
+
+        // Redirect to login page after registration
+        header('Location: /account/login');
         exit;
     }
 }

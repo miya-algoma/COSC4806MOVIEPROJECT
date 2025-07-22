@@ -1,12 +1,13 @@
-<?php session_start(); ?>
+
+
 <nav style="background:#eee; padding:10px; margin-bottom:20px;">
   <a href="/">Home</a> |
   <a href="/movies">My Movies</a> |
 
   <?php if (isset($_SESSION['auth'])): ?>
-    <div style="display:inline-block; position:relative;">
+    <div style="display:inline-block; position:relative; cursor:pointer;">
       <span>Account ▼</span>
-      <ul style="list-style:none; margin:0; padding:0; position:absolute; background:#fff; border:1px solid #ccc; display:none;">
+      <ul style="list-style:none; margin:0; padding:0; position:absolute; background:#fff; border:1px solid #ccc; display:none; z-index:100;">
         <li><a href="/account/profile">Profile</a></li>
         <li><a href="/account/edit">Edit Profile</a></li>
         <li><a href="/account/logout">Logout</a></li>
@@ -18,7 +19,7 @@
 </nav>
 
 <script>
-// Simple dropdown toggle for the Account menu
+// Dropdown toggle for Account menu
 document.querySelectorAll('nav div').forEach(menu => {
   menu.addEventListener('click', () => {
     const ul = menu.querySelector('ul');

@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head><title>Login</title></head>
+<head>
+    <title>Login</title>
+</head>
 <body>
-<?php include __DIR__ . '/../partials/navbar.php'; ?>
+    <h1>Login</h1>
+    <form method="POST" action="/account/login">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required />
+        <br/>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required />
+        <br/>
+        <button type="submit">Login</button>
+    </form>
 
-<h2>Login</h2>
-<?php if (!empty($error)): ?>
-    <p style="color:red;"><?= htmlspecialchars($error) ?></p>
-<?php endif; ?>
-<form method="POST" action="/account/login">
-    <label>Username: <input type="text" name="username" required></label><br/>
-    <label>Password: <input type="password" name="password" required></label><br/>
-    <button type="submit">Login</button>
-</form>
+    <p><a href="/account/register">Create Account</a></p>
+
+    <p><a href="/">Back to home</a></p>
 </body>
 </html>
