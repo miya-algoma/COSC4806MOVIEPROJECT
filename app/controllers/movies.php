@@ -1,18 +1,33 @@
 <?php
-require_once 'config/database.php';
+require_once __DIR__ . '/../../config/database.php';
 
 class Movies {
     private $db;
+    private $omdbApiKey = 'YOUR_OMDB_API_KEY'; // Put your OMDB API key here
 
     public function __construct() {
         $this->db = db_connect();
     }
 
+    // Display search form and results from OMDB if search query exists
     public function index() {
-        // Optional: you can query movies to list here if you store them locally.
-        require 'app/views/movies/search.php';
+        $results = [];
+        if (!empty($_GET['q'])) {
+            $search = urlencode($_GET['q']);
+            $url = "http://www.omdbapi.com/?apikey={$this->omdbApiKey}&s={$search}";
+
+            $response = file_get_contents($url);
+            if ($response !== false) {
+                $data = json_decode($response, true);
+                if (isset($data['Search'])) {
+                    $results = $data['Search'];
+                }
+            }
+        }
+        require __DIR__ . '/../views/movies/search.php';
     }
 
+    // Show a specific movie details from your database
     public function show($id) {
         $stmt = $this->db->prepare('SELECT * FROM movies WHERE id = :id');
         $stmt->execute(['id' => $id]);
@@ -28,9 +43,10 @@ class Movies {
         $avg = $stmt->fetch();
         $avg_rating = $avg['avg_rating'] ?? 0;
 
-        require 'app/views/movies/show.php';
+        require __DIR__ . '/../views/movies/show.php';
     }
 
+    // Save or update a user rating for a movie
     public function rate() {
         if (!isset($_POST['movie_id'], $_POST['rating'])) {
             header('Location: /movies');
