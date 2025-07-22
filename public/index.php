@@ -13,7 +13,8 @@ if ($path === '/') {
     $controller = new Home();
     $controller->index();
 
-} else if (preg_match('#^/movies(?:/(\d+))?$#', $path, $matches)) {
+} else if (preg_match('#^/movies(?:/([a-zA-Z0-9]+))?$#', $path, $matches)) {
+
     require __DIR__ . '/../app/controllers/movies.php';
     $controller = new Movies();
 
