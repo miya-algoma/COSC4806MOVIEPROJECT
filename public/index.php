@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 $url = $_SERVER['REQUEST_URI'];
 
@@ -9,12 +9,12 @@ $path = parse_url($url, PHP_URL_PATH);
 
 // Routes
 if ($path === '/') {
-    require 'app/controllers/home.php';
+    require __DIR__ . '/../app/controllers/home.php';
     $controller = new Home();
     $controller->index();
 
 } else if (preg_match('#^/movies(?:/(\d+))?$#', $path, $matches)) {
-    require 'app/controllers/movies.php';
+    require __DIR__ . '/../app/controllers/movies.php';
     $controller = new Movies();
 
     if (isset($matches[1])) {
@@ -24,12 +24,12 @@ if ($path === '/') {
     }
 
 } else if ($path === '/movies/rate' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    require 'app/controllers/movies.php';
+    require __DIR__ . '/../app/controllers/movies.php';
     $controller = new Movies();
     $controller->rate();
 
 } else if (strpos($path, '/account') === 0) {
-    require 'app/controllers/account.php';
+    require __DIR__ . '/../app/controllers/account.php';
     $controller = new Account();
 
     if ($path === '/account/login') {
