@@ -4,7 +4,8 @@
 <body>
 <?php include __DIR__ . '/../partials/navbar.php'; ?>
 
-<h2>Welcome, <?= htmlspecialchars($_SESSION['auth']['name']) ?></h2>
+  <h2>Welcome, <?= htmlspecialchars($_SESSION['auth']['name'] ?? '') ?></h2>
+
 
 <p>Username: <?= htmlspecialchars($_SESSION['auth']['username']) ?></p>
 

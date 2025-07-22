@@ -21,7 +21,12 @@ class Account {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['auth'] = ['username' => $user['username'], 'id' => $user['id']];
+            $_SESSION['auth'] = [
+              'username' => $user['username'], 
+              'id' => $user['id'],
+              'name' => $user['name'] ?? ''
+            ];
+
             header('Location: /account');
             exit;
         } else {
