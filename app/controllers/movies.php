@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../config/database.php';
 
 class Movies {
     private $db;
-    private $omdbApiKey = 'YOUR_OMDB_API_KEY'; // Put your OMDB API key here
+    private $omdbApiKey = 'f9f6d42b'; // Your OMDB API key here
 
     public function __construct() {
         $this->db = db_connect();
